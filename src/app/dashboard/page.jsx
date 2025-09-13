@@ -11,20 +11,21 @@ import {
 } from "@/components/ui/sidebar"
 
 import data from "./data.json"
-import {useAuthState} from 'react-firebase-hooks/auth'
-import {auth} from '@/app/firebase/config'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '@/app/firebase/config'
 import { useRouter } from 'next/navigation';
+import { useEffect } from "react"
 
 export default function Page() {
-    const [user] = useAuthState(auth);
-    const router = useRouter()
-    const userSession = sessionStorage.getItem('user');
+    const [user, loading] = useAuthState(auth);
+    const router = useRouter();
 
-    console.log({ user })
+    useEffect(() => {
+        if (!loading && !user) {
+            router.push('/');
+        }
+    }, [user, loading, router]);
 
-    if (!user && !userSession) {
-        router.push('/sign-up')
-    }
 
     return (
         <SidebarProvider
