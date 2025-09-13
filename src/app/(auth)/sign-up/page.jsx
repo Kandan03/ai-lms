@@ -21,6 +21,7 @@ export default function SignUpPage() {
   const router = useRouter()
 
 
+  // ...existing code...
   const handleSignUp = async () => {
     try {
       const res = await createUserWithEmailAndPassword(email, password)
@@ -29,9 +30,11 @@ export default function SignUpPage() {
       setEmail('');
       setPassword('')
       if (res) {
+        // Save user email and uid to Firestore
         await addDoc(collection(db, "users"), {
           email: res?.user?.email,
           uid: res?.user?.uid,
+          role: "user",
           createdAt: new Date()
         });
         router.push('/dashboard')
@@ -40,6 +43,7 @@ export default function SignUpPage() {
       console.error(e)
     }
   };
+  // ...existing code...
 
   const { login, isPending } = useLogin();
 
